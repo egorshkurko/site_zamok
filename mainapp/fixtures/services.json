@@ -1,0 +1,4 @@
+[
+  {"model":"sitecore.service","pk":1,
+   "fields":{"title":"Вскрытие замков","slug":"vskrytie","description":"Профессионально","price":"от 1500","order":1}}
+]

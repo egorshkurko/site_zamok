@@ -1,0 +1,653 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Master Zamok - Профессиональные услуги по вскрытию замков{% endblock %}
+
+{% block content %}
+<!-- Главный баннер -->
+<section class="main-header">
+    <div class="container">
+        <h1>Профессиональные услуги по вскрытию замков</h1>
+<!--        <p>П</p>-->
+        <a href="tel:+78121234567" class="cta-button" style="display: inline-block; background: #d4af37; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 20px; font-weight: bold;">
+            📞 Срочный вызов
+        </a>
+    </div>
+</section>
+
+<!-- Форма заявки -->
+<div class="order-form-container">
+    <div class="order-form-content">
+
+        <!-- Левая часть - текст -->
+        <div class="order-form-text">
+            <h2 class="form-title">Нужна срочная помощь?</h2>
+
+            <div class="problem-list">
+                <div class="problem-item">
+                    <span class="problem-icon">🔒</span>
+                    <span class="problem-text">Застряли за дверью?</span>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">🔑</span>
+                    <span class="problem-text">Сломался замок?</span>
+                </div>
+                <div class="problem-item">
+                    <span class="problem-icon">🚪</span>
+                    <span class="problem-text">Потеряли ключи?</span>
+                </div>
+            </div>
+
+            <div class="advantages-box">
+                <h3 class="advantages-title">Почему выбирают нас:</h3>
+                <ul class="advantages-list">
+                    <li class="advantage-item">
+                        <span class="check-icon">✓</span>
+                        <strong>Приезжаем за 30 минут</strong> по Санкт-Петербургу
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">✓</span>
+                        <strong>Работаем 24/7</strong> без выходных
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">✓</span>
+                        <strong>Гарантия на работы</strong> до 1 года
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">✓</span>
+                        <strong>Аккуратно и без повреждений</strong>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="emergency-contact">
+                <div class="emergency-label">Экстренный вызов</div>
+                <a href="tel:+78121234567" class="emergency-phone">+7 (812) 123-45-67</a>
+            </div>
+        </div>
+
+        <!-- Правая часть - форма -->
+        <div class="order-form-box">
+
+            <!-- Сообщения -->
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="message {% if message.tags == 'success' %}message-success{% else %}message-error{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <h3 class="form-header">📞 Оставить заявку</h3>
+
+            <form method="post" class="order-form">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label">Ваше имя *</label>
+                    <input type="text" name="name"
+                           placeholder="Как к вам обращаться?"
+                           required
+                           class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" name="phone"
+                           placeholder="+7 (___) ___-__-__"
+                           required
+                           class="form-input"
+                           inputmode="tel">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Требуемая услуга</label>
+                    <select name="service_type" class="form-select">
+                        <option value="unlock">🔓 Вскрытие дверей</option>
+                        <option value="replace">🔑 Замена замков</option>
+                        <option value="repair">🛠️ Ремонт замков</option>
+                        <option value="consult">💬 Консультация</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="btn-icon">🚀</span>
+                    Отправить заявку
+                </button>
+
+                <p class="form-note">
+                    ⏱️ Мастер перезвонит в течение 5 минут
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Основные стили контейнера */
+.order-form-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)),
+                url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&w=1200&h=600&fit=crop') center/cover;
+    padding: 40px 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.order-form-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+/* Левая часть - текст */
+.order-form-text {
+    color: #2c3e50;
+}
+
+.form-title {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: #d4af37;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.problem-list {
+    margin-bottom: 30px;
+}
+
+.problem-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.problem-icon {
+    font-size: 24px;
+    margin-right: 12px;
+    min-width: 30px;
+}
+
+.problem-text {
+    font-weight: 600;
+}
+
+.advantages-box {
+    background: rgba(212, 175, 55, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #d4af37;
+    margin-bottom: 30px;
+}
+
+.advantages-title {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.advantages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.advantage-item {
+    margin-bottom: 12px;
+    padding-left: 28px;
+    position: relative;
+    line-height: 1.4;
+}
+
+.check-icon {
+    position: absolute;
+    left: 0;
+    color: #d4af37;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.emergency-contact {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.emergency-label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.emergency-phone {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+/* Правая часть - форма */
+.order-form-box {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.messages-container {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.message-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 16px; /* Важно для iOS zoom */
+    background: white;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Улучшения для iOS */
+.form-input {
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px !important; /* Предотвращает zoom в iOS */
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #d4af37, #c19b2a);
+    color: white;
+    padding: 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-icon {
+    font-size: 20px;
+}
+
+.form-note {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* ==================== */
+/* АДАПТАЦИЯ ДЛЯ IPHONE */
+/* ==================== */
+
+/* iPhone (768px и меньше) */
+@media (max-width: 768px) {
+    .order-form-container {
+        padding: 25px 15px;
+        border-radius: 15px;
+        margin: 20px 10px;
+        background: linear-gradient(rgba(255,255,255,0.98), rgba(255,255,255,0.98));
+    }
+
+    .order-form-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .form-title {
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .problem-item {
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .advantages-box {
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .advantages-title {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .emergency-contact {
+        padding: 18px;
+    }
+
+    .emergency-phone {
+        font-size: 20px;
+    }
+
+    .order-form-box {
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+
+    .form-header {
+        font-size: 22px;
+    }
+
+    /* Критически важные стили для iOS */
+    .form-input, .form-select {
+        font-size: 16px !important; /* Предотвращает zoom */
+        padding: 18px 16px; /* Увеличиваем тач-зону */
+        border-radius: 10px;
+        -webkit-appearance: none;
+        border-width: 2px;
+    }
+
+    .submit-btn {
+        padding: 20px;
+        font-size: 18px;
+        border-radius: 10px;
+    }
+
+    /* Улучшение кликабельности для iOS */
+    .form-input:focus, .form-select:focus {
+        border-color: #d4af37;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Маленькие iPhone (480px и меньше) */
+@media (max-width: 480px) {
+    .order-form-container {
+        padding: 20px 12px;
+        margin: 15px 8px;
+    }
+
+    .form-title {
+        font-size: 24px;
+    }
+
+    .problem-item {
+        font-size: 15px;
+    }
+
+    .advantages-box {
+        padding: 18px;
+    }
+
+    .order-form-box {
+        padding: 20px 15px;
+    }
+
+    .form-input, .form-select {
+        padding: 16px 14px;
+    }
+
+    .submit-btn {
+        padding: 18px;
+        font-size: 17px;
+    }
+}
+
+/* Очень маленькие iPhone (360px и меньше) */
+@media (max-width: 360px) {
+    .order-form-container {
+        padding: 15px 10px;
+    }
+
+    .form-title {
+        font-size: 22px;
+    }
+
+    .problem-icon {
+        font-size: 20px;
+        margin-right: 8px;
+    }
+
+    .order-form-box {
+        padding: 18px 12px;
+    }
+}
+
+/* Портретная ориентация iPhone */
+@media (max-width: 768px) and (orientation: portrait) {
+    .order-form-content {
+        gap: 25px;
+    }
+
+    .form-input, .form-select {
+        min-height: 50px; /* Увеличиваем высоту для удобного тапа */
+    }
+}
+
+/* Ландшафтная ориентация iPhone */
+@media (max-width: 900px) and (orientation: landscape) {
+    .order-form-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .order-form-container {
+        padding: 20px;
+    }
+}
+
+/* Улучшения для Safari iOS */
+@supports (-webkit-touch-callout: none) {
+    .form-input, .form-select {
+        -webkit-appearance: none;
+        border-radius: 10px;
+    }
+
+    .submit-btn {
+        -webkit-appearance: none;
+    }
+}
+
+/* Предотвращение zoom при фокусе в iOS */
+@media screen and (max-width: 768px) {
+    input.form-input[type="text"],
+    input.form-input[type="tel"],
+    select.form-select {
+        font-size: 16px !important;
+        transform: scale(1); /* Фикс для некоторых версий iOS */
+    }
+}
+
+/* Улучшение тач-событий */
+.form-input, .form-select, .submit-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Фокус состояния для доступности */
+.form-input:focus, .form-select:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    outline: none;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем скрытое поле с датой
+    const forms = document.querySelectorAll('.order-form');
+    forms.forEach(form => {
+        const dateField = document.createElement('input');
+        dateField.type = 'hidden';
+        dateField.name = 'form_date';
+        dateField.value = new Date().toLocaleString('ru-RU');
+        form.appendChild(dateField);
+    });
+
+    // Улучшенная маска для телефона с поддержкой iOS
+    const phoneInput = document.querySelector('input[name="phone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            // Форматирование номера
+            if (value.startsWith('7') || value.startsWith('8')) {
+                value = value.substring(1);
+            }
+
+            let formattedValue = '+7';
+            if (value.length > 0) {
+                formattedValue += ' (' + value.substring(0, 3);
+            }
+            if (value.length > 3) {
+                formattedValue += ') ' + value.substring(3, 6);
+            }
+            if (value.length > 6) {
+                formattedValue += '-' + value.substring(6, 8);
+            }
+            if (value.length > 8) {
+                formattedValue += '-' + value.substring(8, 10);
+            }
+
+            e.target.value = formattedValue;
+        });
+
+        // Автофокус на поле имени для удобства
+        const nameInput = document.querySelector('input[name="name"]');
+        if (nameInput && window.innerWidth > 768) {
+            nameInput.focus();
+        }
+    }
+
+    // Предотвращение отправки формы при пустых полях
+    const orderForm = document.querySelector('.order-form');
+    if (orderForm) {
+        orderForm.addEventListener('submit', function(e) {
+            const name = this.querySelector('input[name="name"]').value.trim();
+            const phone = this.querySelector('input[name="phone"]').value.trim();
+
+            if (!name || !phone) {
+                e.preventDefault();
+                alert('Пожалуйста, заполните все обязательные поля');
+                return false;
+            }
+        });
+    }
+});
+</script>
+
+<!-- Секция услуг (превью) -->
+<section class="section">
+    <div class="container">
+        <h2 class="section-title"></h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🔓</div>
+                <h3>Вскрытие дверей</h3>
+                <p>Быстрое и аккуратное вскрытие без повреждений</p>
+                <a href="{% url 'services' %}" style="color: #d4af37; text-decoration: none; font-weight: bold;">Подробнее →</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔑</div>
+                <h3>Замена замков</h3>
+                <p>Установка современных надежных замков</p>
+                <a href="{% url 'services' %}" style="color: #d4af37; text-decoration: none; font-weight: bold;">Подробнее →</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛠️</div>
+                <h3>Ремонт замков</h3>
+                <p>Профессиональный ремонт любой сложности</p>
+                <a href="{% url 'services' %}" style="color: #d4af37; text-decoration: none; font-weight: bold;">Подробнее →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Галерея (превью) -->
+<section class="gallery-section">
+    <div class="container">
+        <h2 class="section-title">Наши работы</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="{% static 'images/gallery1.jpg' %}" alt="Пример работы"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=color:#666;padding:20px>Наша работа 1</div>';">
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/gallery2.jpg' %}" alt="Пример работы"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=color:#666;padding:20px>Наша работа 2</div>';">
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'gallery' %}" style="color: #d4af37; text-decoration: none; font-weight: bold;">
+                Смотреть все работы →
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
