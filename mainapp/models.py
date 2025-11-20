@@ -48,6 +48,10 @@ class GalleryImage(models.Model):
     title=models.CharField(max_length=200, blank=True)
     image=models.ImageField(upload_to="gallery/")
     uploaded_at=models.DateTimeField(auto_now_add=True)
+    class Meta:
+        verbose_name = 'Галерея'
+        verbose_name_plural = 'Галерея'
+        # ordering = ['order', 'title']
     def __str__(self): return self.title or self.image.name
 
 class Booking(models.Model):

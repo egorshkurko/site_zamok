@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
-from .models import Service
+from .models import Service, GalleryImage
 
 def index(request):
     if request.method == 'POST':
@@ -85,41 +85,45 @@ def services(request):
     return render(request, 'services.html', context)
 
 def gallery(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '').strip()
-        phone = request.POST.get('phone', '').strip()
-        service_type = request.POST.get('service_type', 'unlock')
+    gallery_list = GalleryImage.objects.filter()  # Только активные
+    context = {
+        'gallery': gallery_list,
+    }
+    # if request.method == 'POST':
+    #     name = request.POST.get('name', '').strip()
+    #     phone = request.POST.get('phone', '').strip()
+    #     service_type = request.POST.get('service_type', 'unlock')
+    #
+    #     if name and phone:
+    #         # Отправка email
+    #         subject = f'Новая заявка: {service_type}'
+    #         message = f'''
+    #         Новая заявка с сайта Master Zamok:
+    #
+    #         Имя: {name}
+    #         Телефон: {phone}
+    #         Услуга: {service_type}
+    #         Страница: Галерея
+    #         Дата: {request.POST.get("form_date", "Не указана")}
+    #         '''
+    #
+    #         try:
+    #             send_mail(
+    #                 subject,
+    #                 message,
+    #                 'noreply@master-zamok.ru',
+    #                 ['your-email@yandex.ru'],  # Замените на ваш email
+    #                 fail_silently=False,
+    #             )
+    #             messages.success(request, '✅ Заявка отправлена! Мы вам перезвоним.')
+    #         except Exception as e:
+    #             messages.error(request, '❌ Ошибка отправки. Позвоните нам: +7 123 456-76-90')
+    #     else:
+    #         messages.error(request, '❌ Заполните все обязательные поля.')
+    #
+    #     return redirect('/gallery/#order-form')
 
-        if name and phone:
-            # Отправка email
-            subject = f'Новая заявка: {service_type}'
-            message = f'''
-            Новая заявка с сайта Master Zamok:
-
-            Имя: {name}
-            Телефон: {phone}
-            Услуга: {service_type}
-            Страница: Галерея
-            Дата: {request.POST.get("form_date", "Не указана")}
-            '''
-
-            try:
-                send_mail(
-                    subject,
-                    message,
-                    'noreply@master-zamok.ru',
-                    ['your-email@yandex.ru'],  # Замените на ваш email
-                    fail_silently=False,
-                )
-                messages.success(request, '✅ Заявка отправлена! Мы вам перезвоним.')
-            except Exception as e:
-                messages.error(request, '❌ Ошибка отправки. Позвоните нам: +7 123 456-76-90')
-        else:
-            messages.error(request, '❌ Заполните все обязательные поля.')
-
-        return redirect('/gallery/#order-form')
-
-    return render(request, 'gallery.html')
+    return render(request, 'gallery.html', context)
 
 
 def contacts(request):
