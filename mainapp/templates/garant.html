@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Гарантия - Master Zamok{% endblock %}
+
+{% block content %}
+<style>
+.advantages-box {
+    background: rgba(212, 175, 55, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #d4af37;
+    margin-bottom: 30px;
+}
+
+.advantages-title {
+    color: #0a0a0a;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.advantages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.advantage-item {
+    margin-bottom: 0.75rem;
+    padding-left: 28px;
+    position: relative;
+    line-height: 1.5;
+    font-size: 15px;
+    color: #4a4a4a;
+    font-weight: 400;
+}
+
+.check-icon {
+    display: flex;
+    align-items: center;
+    color: #25a745;
+    position: absolute;
+    left: 0;
+    top: 2px;
+}
+
+.check-icon svg {
+    width: 20px;
+    height: 20px;
+}
+</style>
+<section class="main-header">
+    <div class="container">
+        <h1>Гарантия на работы</h1>
+        <p>Мы гарантируем качество наших услуг</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Наши гарантии</h2>
+            
+            <div class="advantages-box" style="margin-bottom: 2rem;">
+                <h3 class="advantages-title">Гарантия на работы</h3>
+                <ul class="advantages-list">
+                    <li class="advantage-item">
+                        <span class="check-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <strong>Гарантия до 1 года</strong> на все виды работ по вскрытию и ремонту замков
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <strong>Бесплатное устранение</strong> недостатков в течение гарантийного срока
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <strong>Письменная гарантия</strong> на все выполненные работы
+                    </li>
+                    <li class="advantage-item">
+                        <span class="check-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <strong>Без повреждений</strong> - гарантируем аккуратность работы
+                    </li>
+                </ul>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                <h3 style="color: #0a0a0a; margin-bottom: 1rem; font-size: 1.5rem;">Условия гарантии</h3>
+                <p style="color: #4a4a4a; line-height: 1.6; margin-bottom: 1rem;">
+                    Гарантийный срок начинает действовать с момента выполнения работ и составляет:
+                </p>
+                <ul style="color: #4a4a4a; line-height: 1.8; padding-left: 1.5rem;">
+                    <li><strong>Вскрытие замков</strong> - гарантия 6 месяцев</li>
+                    <li><strong>Ремонт замков</strong> - гарантия до 1 года</li>
+                    <li><strong>Установка новых замков</strong> - гарантия до 1 года</li>
+                    <li><strong>Замена замков</strong> - гарантия до 1 года</li>
+                </ul>
+            </div>
+
+            <div style="background: #fff3cd; padding: 2rem; border-radius: 15px; border-left: 4px solid #d4af37; margin-bottom: 2rem;">
+                <h3 style="color: #0a0a0a; margin-bottom: 1rem; font-size: 1.5rem;">Важно знать</h3>
+                <p style="color: #4a4a4a; line-height: 1.6;">
+                    Гарантия не распространяется на случаи механических повреждений, вызванных неправильной эксплуатацией, 
+                    попытками самостоятельного ремонта или воздействием третьих лиц. При возникновении проблем в течение 
+                    гарантийного срока свяжитесь с нами - мы устраним недостатки бесплатно.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="tel:+78121234567" class="cta-button" style="display: inline-flex; align-items: center; gap: 8px; background: #d4af37; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Связаться с нами
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

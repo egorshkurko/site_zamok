@@ -171,3 +171,7 @@ def contacts(request):
         return redirect('/contacts/#order-form')
 
     return render(request, 'contacts.html')
+
+
+def garant(request):
+    return render(request, 'garant.html')
