@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Отзывы - Master Zamok{% endblock %}
+
+{% block content %}
+<section class="main-header">
+    <div class="container">
+        <h1>Отзывы наших клиентов</h1>
+        <p>Ваше мнение очень важно для нас</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div style="max-width: 900px; margin: 0 auto;">
+            
+            <!-- Форма добавления отзыва -->
+            <div class="order-form-box" style="margin-bottom: 3rem;">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Оставить отзыв</h2>
+                
+                {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                    <div class="message message-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <form method="POST" class="order-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_date" value="">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Ваше имя *</label>
+                        <input type="text" name="name" class="form-input" required placeholder="Иван Иванов">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Телефон (необязательно)</label>
+                        <input type="tel" name="phone" class="form-input" placeholder="+7 (999) 123-45-67">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Оценка *</label>
+                        <select name="rating" class="form-select" required>
+                            <option value="5" selected>5 - Отлично</option>
+                            <option value="4">4 - Хорошо</option>
+                            <option value="3">3 - Удовлетворительно</option>
+                            <option value="2">2 - Плохо</option>
+                            <option value="1">1 - Очень плохо</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Ваш отзыв *</label>
+                        <textarea name="text" class="form-input" rows="5" required placeholder="Расскажите о вашем опыте работы с нами..." style="resize: vertical; min-height: 120px; font-family: inherit;"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        Отправить отзыв
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Список отзывов -->
+            <h2 class="section-title" style="margin-bottom: 2rem;">Отзывы клиентов</h2>
+            
+            {% if reviews %}
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    {% for review in reviews %}
+                    <div class="review-card">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                            <div>
+                                <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem; font-weight: 600; color: #0a0a0a; line-height: 1.3; letter-spacing: -0.01em;">{{ review.name }}</h3>
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #4a4a4a; font-size: 0.875rem;">
+                                    <span>{{ review.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#d4af37" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#e9ecef" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                        </svg>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p style="margin: 0; color: #4a4a4a; line-height: 1.6; font-size: 15px;">{{ review.text|linebreaks }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 15px; color: #4a4a4a;">
+                    <p style="margin: 0; font-size: 1.125rem;">Пока нет отзывов. Будьте первым!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<style>
+/* Правая часть - форма */
+.order-form-box {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.messages-container {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.message-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    color: #0a0a0a;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #0a0a0a;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.form-input, .form-select {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 16px;
+    background: white;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input {
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px !important;
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+}
+
+.submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #d4af37, #c19b2a);
+    color: white;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+.review-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-left: 4px solid #d4af37;
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* Улучшение тач-событий */
+.form-input, .form-select, .submit-btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Фокус состояния для доступности */
+.form-input:focus, .form-select:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    outline: none;
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .order-form-box {
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+
+    .form-input, .form-select {
+        font-size: 16px !important;
+        padding: 18px 16px;
+        border-radius: 10px;
+        -webkit-appearance: none;
+        border-width: 2px;
+    }
+
+    .submit-btn {
+        padding: 20px;
+        font-size: 18px;
+        border-radius: 10px;
+    }
+
+    .form-input:focus, .form-select:focus {
+        border-color: #d4af37;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-form-box {
+        padding: 20px 15px;
+    }
+
+    .form-input, .form-select {
+        padding: 16px 14px;
+    }
+
+    .submit-btn {
+        padding: 18px;
+        font-size: 17px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    input.form-input[type="text"],
+    input.form-input[type="tel"],
+    select.form-select {
+        font-size: 16px !important;
+        transform: scale(1);
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    .form-input, .form-select {
+        -webkit-appearance: none;
+        border-radius: 10px;
+    }
+
+    .submit-btn {
+        -webkit-appearance: none;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Устанавливаем текущую дату в скрытое поле
+    const dateInput = document.querySelector('input[name="form_date"]');
+    if (dateInput) {
+        const now = new Date();
+        dateInput.value = now.toLocaleString('ru-RU');
+    }
+});
+</script>
+{% endblock %}
+

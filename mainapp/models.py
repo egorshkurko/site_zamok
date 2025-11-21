@@ -73,3 +73,27 @@ class ContactInfo(models.Model):
     class Meta:
         verbose_name="Контактная информация"
         verbose_name_plural="Контактная информация"
+
+class Review(models.Model):
+    RATING_CHOICES = [
+        (5, '5 - Отлично'),
+        (4, '4 - Хорошо'),
+        (3, '3 - Удовлетворительно'),
+        (2, '2 - Плохо'),
+        (1, '1 - Очень плохо'),
+    ]
+    
+    name = models.CharField(max_length=200, verbose_name='Имя')
+    text = models.TextField(verbose_name='Текст отзыва')
+    rating = models.IntegerField(choices=RATING_CHOICES, default=5, verbose_name='Оценка')
+    phone = models.CharField(max_length=50, blank=True, verbose_name='Телефон')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    is_published = models.BooleanField(default=False, verbose_name='Опубликован')
+    
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.name} - {self.get_rating_display()}"

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib import messages
-from .models import Service, GalleryImage
+from .models import Service, GalleryImage, Review
 
 def index(request):
     if request.method == 'POST':
@@ -171,6 +171,34 @@ def contacts(request):
         return redirect('/contacts/#order-form')
 
     return render(request, 'contacts.html')
+
+
+def otziv(request):
+    reviews = Review.objects.filter(is_published=True).order_by('-created_at')
+    
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        text = request.POST.get('text', '').strip()
+        rating = request.POST.get('rating', '5')
+        phone = request.POST.get('phone', '').strip()
+        
+        if name and text:
+            review = Review.objects.create(
+                name=name,
+                text=text,
+                rating=int(rating),
+                phone=phone,
+                is_published=False  # Требуется модерация
+            )
+            messages.success(request, '✅ Спасибо за ваш отзыв! Он будет опубликован после модерации.')
+            return redirect('/otziv/')
+        else:
+            messages.error(request, '❌ Заполните все обязательные поля.')
+    
+    context = {
+        'reviews': reviews,
+    }
+    return render(request, 'otziv.html', context)
 
 
 def garant(request):

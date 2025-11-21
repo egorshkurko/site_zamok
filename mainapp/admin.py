@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Service, GalleryImage, Booking, ContactInfo
+from .models import Service, GalleryImage, Booking, ContactInfo, Review
 
 from .models import Service
 from django.utils.html import format_html
@@ -51,3 +51,11 @@ class BA(admin.ModelAdmin):
     search_fields=("name","phone","address","message")
 
 admin.site.register(ContactInfo)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['name', 'rating', 'created_at', 'is_published']
+    list_filter = ['is_published', 'rating', 'created_at']
+    list_editable = ['is_published']
+    search_fields = ['name', 'text', 'phone']
+    readonly_fields = ['created_at']
