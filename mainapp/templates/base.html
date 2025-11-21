@@ -16,6 +16,23 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Предотвращение обрезки текста */
+        * {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        img, svg {
+            max-width: 100%;
+            height: auto;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #ffffff;
@@ -458,18 +475,24 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .contact-info {
             margin-bottom: 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: clamp(0.875rem, 2vw, 1rem);
         }
 
         .contact-info strong {
             color: #d4af37;
             display: block;
             margin-bottom: 5px;
+            font-size: clamp(0.9rem, 2.2vw, 1rem);
         }
 
         /* Подвал */
@@ -703,12 +726,72 @@
                 gap: 10px;
             }
 
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .contact-info {
+                font-size: clamp(0.8rem, 3vw, 0.9rem);
+                margin-bottom: 12px;
+            }
+
+            .contact-info strong {
+                font-size: clamp(0.85rem, 3.2vw, 0.95rem);
+            }
+
+            .main-header {
+                padding: 12px 0;
+            }
+
             .main-header h1 {
-                font-size: 28px;
+                font-size: 20px;
+                margin-bottom: 0.4rem;
+                line-height: 1.2;
             }
 
             .main-header p {
+                font-size: 13px;
+                margin-bottom: 0;
+            }
+
+            .cta-button {
+                padding: 8px 16px !important;
+                font-size: 13px !important;
+                margin-top: 10px !important;
+            }
+
+            .cta-button svg {
+                width: 16px !important;
+                height: 16px !important;
+            }
+        }
+
+        /* Очень маленькие экраны */
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 10px 0;
+            }
+
+            .main-header h1 {
                 font-size: 16px;
+                margin-bottom: 0.3rem;
+                line-height: 1.25;
+            }
+
+            .main-header p {
+                font-size: 11px;
+            }
+
+            .cta-button {
+                padding: 6px 12px !important;
+                font-size: 12px !important;
+                margin-top: 8px !important;
+            }
+
+            .cta-button svg {
+                width: 14px !important;
+                height: 14px !important;
             }
         }
 
