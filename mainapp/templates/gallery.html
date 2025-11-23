@@ -31,15 +31,18 @@
                 </div>
                 {% endif %}
             </div>
+            <div class="card-body d-flex flex-column p-4">
+                <h3 class="card-title fw-bold mb-3">{{ galler.title }}</h3>
+                <p class="card-text text-muted flex-grow-1 mb-3">{{ galler.description|linebreaksbr }}</p>
 
             <!-- ДОБАВЛЕНО: Блок с названием фотографии -->
-            <div class="card-body">
-                <h5 class="card-title">{{ galler.title }}</h5>
-                <!-- Можно добавить описание если есть такое поле -->
-                {% if galler.description %}
-                <p class="card-text">{{ galler.description }}</p>
-                {% endif %}
-            </div>
+<!--            <div class="card-body">-->
+<!--                <h5 class="card-title">{{ galler.title }}</h5>-->
+<!--                &lt;!&ndash; Можно добавить описание если есть такое поле &ndash;&gt;-->
+<!--                {% if galler.description %}-->
+<!--                <p class="card-text">{{ galler.description }}</p>-->
+<!--                {% endif %}-->
+<!--            </div>-->
         </div>
     </div>
     {% empty %}
