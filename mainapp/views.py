@@ -275,13 +275,16 @@ def otziv(request):
             
             # Отправка уведомления на почту о новом отзыве
             try:
+                import logging
+                logger = logging.getLogger(__name__)
+                
                 # Формируем URL админки
                 admin_url = f"http://{request.get_host()}/admin/mainapp/review/{review.id}/change/"
                 
                 subject = f'Новый отзыв на сайте Master Zamok от {name}'
                 
                 # Контекст для шаблона
-                context = {
+                context_email = {
                     'name': name,
                     'phone': phone,
                     'rating': int(rating),
@@ -291,30 +294,40 @@ def otziv(request):
                 }
                 
                 # Рендерим шаблоны
-                text_message = render_to_string('review_notification.txt', context)
-                html_message = render_to_string('review_notification.html', context)
+                text_message = render_to_string('review_notification.txt', context_email)
+                html_message = render_to_string('review_notification.html', context_email)
+                
+                # Проверяем настройки email
+                recipient_email = settings.REVIEW_NOTIFICATION_EMAIL
+                logger.info(f"Отправка email о новом отзыве на {recipient_email}")
+                logger.info(f"EMAIL_HOST: {settings.EMAIL_HOST}, EMAIL_PORT: {settings.EMAIL_PORT}")
+                logger.info(f"FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}")
                 
                 # Создаем EmailMultiAlternatives с правильными заголовками
                 email = EmailMultiAlternatives(
                     subject=subject,
                     body=text_message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
-                    to=[settings.REVIEW_NOTIFICATION_EMAIL],
+                    to=[recipient_email],
                     reply_to=[settings.DEFAULT_FROM_EMAIL],
                 )
                 
                 # Добавляем HTML версию как альтернативу
                 email.attach_alternative(html_message, "text/html")
                 
-                # Отправляем с таймаутом (fail_silently=True чтобы не падать при ошибках)
-                email.send(fail_silently=True)
+                # Отправляем (fail_silently=False чтобы видеть ошибки)
+                result = email.send(fail_silently=False)
+                logger.info(f"Email отправлен успешно. Результат: {result}")
                 
             except Exception as e:
-                # Логируем ошибку, но не показываем пользователю
-                # Отзыв уже сохранен, поэтому не критично если email не отправился
+                # Логируем ошибку подробно
                 import logging
                 logger = logging.getLogger(__name__)
                 logger.error(f"Ошибка отправки email о новом отзыве: {e}", exc_info=True)
+                # Выводим в консоль для отладки на сервере
+                print(f"ERROR: Ошибка отправки email о новом отзыве: {e}")
+                import traceback
+                traceback.print_exc()
             
             messages.success(request, '✅ Спасибо за ваш отзыв! Он будет опубликован после модерации.')
             return redirect('/otziv/')

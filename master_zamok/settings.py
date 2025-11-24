@@ -108,3 +108,40 @@ EMAIL_TIMEOUT = 10  # Таймаут подключения к SMTP сервер
 
 # Адрес для получения уведомлений о новых отзывах
 REVIEW_NOTIFICATION_EMAIL = os.getenv("REVIEW_NOTIFICATION_EMAIL", "allianzufa@gmail.com")
+
+# Настройки логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'django_errors.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'mainapp': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
