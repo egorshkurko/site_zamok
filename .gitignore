@@ -90,3 +90,6 @@ celerybeat.pid
 .dmypy.json
 dmypy.json
 
+# Systemd service files (should be in /etc/systemd/system/, not in project)
+*.service
+
