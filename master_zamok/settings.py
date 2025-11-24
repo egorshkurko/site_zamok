@@ -86,7 +86,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# Для production: директория, куда collectstatic собирает все статические файлы
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# Директории, откуда собирать статические файлы (только если директория существует)
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
