@@ -23,7 +23,7 @@
                 <div class="messages-container">
                     {% for message in messages %}
                     <div class="message message-{{ message.tags }}">
-                        {{ message }}
+                        {{ message|safe }}
                     </div>
                     {% endfor %}
                 </div>

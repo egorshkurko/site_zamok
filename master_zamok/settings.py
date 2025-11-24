@@ -46,6 +46,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "mainapp.context_processors.contact_info",  # Контактная информация
             ],
         },
     },
@@ -99,20 +100,51 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Закомментируйте SMTP настройки и используйте консольный бэкенд
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# ============================================================================
+# НАСТРОЙКИ EMAIL
+# ============================================================================
+# ВНИМАНИЕ: Основные настройки email теперь управляются через админ-панель
+# (модель EmailSettings). Эти настройки используются только как fallback
+# для системных уведомлений Django и при первой инициализации БД.
+# 
+# Для изменения настроек email перейдите в админ-панель:
+# /admin/mainapp/emailsettings/1/change/
+# ============================================================================
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'schkurko.egor@yandex.ru'
-EMAIL_HOST_PASSWORD = 'sjaxfyvovyrngury'
-DEFAULT_FROM_EMAIL = 'schkurko.egor@yandex.ru'  # Должен совпадать с EMAIL_HOST_USER
-SERVER_EMAIL = 'schkurko.egor@yandex.ru'
 EMAIL_TIMEOUT = 10  # Таймаут подключения к SMTP серверу (секунды)
 
+# Email адрес для отправки (можно переопределить через .env)
+# Используется только для системных уведомлений Django
+EMAIL_FROM = os.getenv("EMAIL_FROM", "schkurko.egor@yandex.ru")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "sjaxfyvovyrngury")
+EMAIL_FROM_NAME = os.getenv("EMAIL_FROM_NAME", "MasterZamok")  # Имя отправителя в письмах
+
+# Настройки SMTP (используем одну переменную для упрощения)
+EMAIL_HOST_USER = EMAIL_FROM
+EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+# Формат: "Имя <email>" - в почтовых клиентах будет отображаться "MasterZamok"
+DEFAULT_FROM_EMAIL = f"{EMAIL_FROM_NAME} <{EMAIL_FROM}>"  # Адрес отправителя для всех писем
+SERVER_EMAIL = EMAIL_FROM  # Адрес для системных уведомлений Django (без имени, только email)
+
 # Адреса для получения уведомлений о новых отзывах (можно указать несколько через запятую)
+# Используются только как fallback, основная конфигурация в БД (EmailSettings)
 REVIEW_NOTIFICATION_EMAIL_STR = os.getenv("REVIEW_NOTIFICATION_EMAIL", "allianzufa@gmail.com,schkurko.egor@yandex.ru")
 # Преобразуем строку в список адресов
 REVIEW_NOTIFICATION_EMAIL = [email.strip() for email in REVIEW_NOTIFICATION_EMAIL_STR.split(',') if email.strip()]
+
+# Адреса для получения уведомлений о новых заявках/заказах (можно указать несколько через запятую)
+# Используются только как fallback, основная конфигурация в БД (EmailSettings)
+ORDER_NOTIFICATION_EMAIL_STR = os.getenv("ORDER_NOTIFICATION_EMAIL", "allianzufa@gmail.com,schkurko.egor@yandex.ru")
+# Преобразуем строку в список адресов
+ORDER_NOTIFICATION_EMAIL = [email.strip() for email in ORDER_NOTIFICATION_EMAIL_STR.split(',') if email.strip()]
+
+# Контактная информация
+CONTACT_PHONE = os.getenv("CONTACT_PHONE", "+7 (993) 962-50-87")
+CONTACT_PHONE_TEL = os.getenv("CONTACT_PHONE_TEL", "+79939625087")  # Формат для tel: ссылок (без пробелов и скобок)
 
 # Настройки логирования
 LOGGING = {

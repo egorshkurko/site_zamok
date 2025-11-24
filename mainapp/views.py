@@ -22,28 +22,71 @@ def index(request):
         service_type = request.POST.get('service_type', 'unlock')
 
         if name and phone:
+            # Словарь для преобразования типа услуги в читаемый текст
+            service_types = {
+                'unlock': 'Вскрытие дверей',
+                'replace': 'Замена замков',
+                'repair': 'Ремонт замков',
+                'consult': 'Консультация',
+            }
+            service_type_display = service_types.get(service_type, service_type)
+            
             # Отправка email
-            subject = f'Новая заявка: {service_type}'
-            message = f'''
-            Новая заявка с сайта Master Zamok:
-
-            Имя: {name}
-            Телефон: {phone}
-            Услуга: {service_type}
-            Дата: {request.POST.get("form_date", "Не указана")}
-            '''
-
+            subject = f'Новая заявка: {service_type_display}'
+            
+            # Контекст для шаблона
+            context = {
+                'name': name,
+                'phone': phone,
+                'service_type': service_type,
+                'service_type_display': service_type_display,
+                'form_date': request.POST.get("form_date", "Не указана"),
+            }
+            
             try:
-                send_mail(
-                    subject,
-                    message,
-                    'schkurko.egor@yandex.ru',
-                    ['schkurko.egor@yandex.ru'],  # Замените на ваш email
-                    fail_silently=False,
+                import logging
+                logger = logging.getLogger('mainapp')
+                
+                # Получаем настройки email из settings.py
+                recipient_emails = settings.ORDER_NOTIFICATION_EMAIL
+                from_email = settings.DEFAULT_FROM_EMAIL
+                
+                logger.info(f"Отправка email о новой заявке от {name} на {', '.join(recipient_emails)}")
+                
+                # Рендерим шаблоны
+                text_message = render_to_string('order_notification.txt', context)
+                html_message = render_to_string('order_notification.html', context)
+                
+                # Создаем EmailMultiAlternatives с HTML версией
+                email = EmailMultiAlternatives(
+                    subject=subject,
+                    body=text_message,
+                    from_email=from_email,
+                    to=recipient_emails,
+                    reply_to=[settings.EMAIL_FROM],
                 )
-                messages.success(request, '✅ Заявка отправлена! Мы вам перезвоним.')
+                
+                # Добавляем HTML версию как альтернативу
+                email.attach_alternative(html_message, "text/html")
+                
+                # Отправляем (fail_silently=False чтобы видеть реальные ошибки и логировать их)
+                result = email.send(fail_silently=False)
+                
+                if result:
+                    logger.info(f"Email успешно отправлен о новой заявке от {name} на {', '.join(recipient_emails)}")
+                    messages.success(request, '✅ Заявка отправлена! Мы вам перезвоним.')
+                else:
+                    logger.warning(f"Email не был отправлен о новой заявке от {name} (result={result})")
+                    from django.utils.safestring import mark_safe
+                    messages.error(request, mark_safe(f'❌ Ошибка отправки заявки.<br>Пожалуйста, позвоните нам: {settings.CONTACT_PHONE}'))
+                
             except Exception as e:
-                messages.error(request, f'❌ Ошибка отправки {e}. Позвоните нам: +7 123 456-76-90')
+                import logging
+                logger = logging.getLogger('mainapp')
+                logger.error(f"Ошибка отправки email о новой заявке от {name}: {e}", exc_info=True)
+                # При ошибке просим пользователя перезвонить
+                from django.utils.safestring import mark_safe
+                messages.error(request, mark_safe(f'❌ Ошибка отправки заявки.<br>Пожалуйста, позвоните нам: {settings.CONTACT_PHONE}'))
         else:
             messages.error(request, '❌ Заполните все обязательные поля.')
 
@@ -294,8 +337,9 @@ def otziv(request):
                 text_message = render_to_string('review_notification.txt', context)
                 html_message = render_to_string('review_notification.html', context)
                 
-                # Получаем список адресов получателей
+                # Получаем настройки email из settings.py
                 recipient_emails = settings.REVIEW_NOTIFICATION_EMAIL
+                from_email = settings.DEFAULT_FROM_EMAIL
                 
                 # Логируем перед отправкой
                 import logging
@@ -306,32 +350,43 @@ def otziv(request):
                 email = EmailMultiAlternatives(
                     subject=subject,
                     body=text_message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    to=recipient_emails,  # Теперь это список адресов
-                    reply_to=[settings.DEFAULT_FROM_EMAIL],
+                    from_email=from_email,
+                    to=recipient_emails,
+                    reply_to=[settings.EMAIL_FROM],
                 )
                 
                 # Добавляем HTML версию как альтернативу
                 email.attach_alternative(html_message, "text/html")
                 
-                # Отправляем (fail_silently=True чтобы не падать при ошибках)
-                result = email.send(fail_silently=True)
+                # Отправляем (fail_silently=False чтобы видеть реальные ошибки и логировать их)
+                email_sent = False
+                try:
+                    result = email.send(fail_silently=False)
+                    if result:
+                        logger.info(f"✅ Email успешно отправлен о новом отзыве от {name} (ID: {review.id}) на {', '.join(recipient_emails)}")
+                        email_sent = True
+                    else:
+                        logger.warning(f"⚠️ Email не был отправлен о новом отзыве от {name} (ID: {review.id}) на {', '.join(recipient_emails)}")
+                except Exception as email_error:
+                    # Логируем ошибку отправки
+                    logger.error(f"❌ Ошибка отправки email о новом отзыве от {name} (ID: {review.id}): {email_error}", exc_info=True)
                 
-                if result:
-                    logger.info(f"✅ Email успешно отправлен о новом отзыве от {name} (ID: {review.id}) на {', '.join(recipient_emails)}")
+                # Показываем сообщение пользователю в зависимости от результата
+                if email_sent:
+                    messages.success(request, '✅ Спасибо за ваш отзыв! Он будет опубликован после модерации.')
                 else:
-                    logger.warning(f"⚠️ Email не был отправлен о новом отзыве от {name} (ID: {review.id})")
+                    from django.utils.safestring import mark_safe
+                    messages.warning(request, mark_safe(f'⚠️ Отзыв сохранен, но произошла ошибка отправки уведомления.<br>Пожалуйста, позвоните нам: {settings.CONTACT_PHONE}'))
                 
             except Exception as e:
-                # Логируем ошибку, но не показываем пользователю
-                # Отзыв уже сохранен, поэтому не критично если email не отправился
+                # Логируем ошибку
                 import logging
                 logger = logging.getLogger('mainapp')
-                logger.error(f"❌ Ошибка отправки email о новом отзыве от {name}: {e}", exc_info=True)
-                # Также выводим в консоль для отладки
-                print(f"ERROR: Ошибка отправки email о новом отзыве: {e}")
+                logger.error(f"❌ Ошибка обработки отзыва от {name}: {e}", exc_info=True)
+                # Показываем пользователю сообщение об ошибке
+                from django.utils.safestring import mark_safe
+                messages.error(request, mark_safe(f'❌ Произошла ошибка при сохранении отзыва.<br>Пожалуйста, позвоните нам: {settings.CONTACT_PHONE}'))
             
-            messages.success(request, '✅ Спасибо за ваш отзыв! Он будет опубликован после модерации.')
             return redirect('/otziv/')
         else:
             messages.error(request, '❌ Заполните все обязательные поля.')

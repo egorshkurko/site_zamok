@@ -1,0 +1,10 @@
+Новая заявка с сайта Master Zamok
+
+Имя: {{ name }}
+Телефон: {{ phone }}
+Услуга: {{ service_type_display }}
+Дата заявки: {{ form_date|default:"Не указана" }}
+
+---
+Это автоматическое уведомление от сайта Master Zamok.
+
