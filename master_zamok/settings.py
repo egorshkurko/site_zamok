@@ -106,8 +106,10 @@ DEFAULT_FROM_EMAIL = 'schkurko.egor@yandex.ru'  # Должен совпадат�
 SERVER_EMAIL = 'schkurko.egor@yandex.ru'
 EMAIL_TIMEOUT = 10  # Таймаут подключения к SMTP серверу (секунды)
 
-# Адрес для получения уведомлений о новых отзывах
-REVIEW_NOTIFICATION_EMAIL = os.getenv("REVIEW_NOTIFICATION_EMAIL", "allianzufa@gmail.com")
+# Адреса для получения уведомлений о новых отзывах (можно указать несколько через запятую)
+REVIEW_NOTIFICATION_EMAIL_STR = os.getenv("REVIEW_NOTIFICATION_EMAIL", "allianzufa@gmail.com,schkurko.egor@yandex.ru")
+# Преобразуем строку в список адресов
+REVIEW_NOTIFICATION_EMAIL = [email.strip() for email in REVIEW_NOTIFICATION_EMAIL_STR.split(',') if email.strip()]
 
 # Настройки логирования
 LOGGING = {
@@ -118,6 +120,10 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'console': {
@@ -126,9 +132,9 @@ LOGGING = {
             'formatter': 'verbose',
         },
         'file': {
-            'level': 'ERROR',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'django_errors.log',
+            'filename': BASE_DIR / 'django.log',
             'formatter': 'verbose',
         },
     },
@@ -140,7 +146,7 @@ LOGGING = {
         },
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'ERROR',
+            'level': 'WARNING',
             'propagate': False,
         },
     },
