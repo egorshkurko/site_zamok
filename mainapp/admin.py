@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Service, GalleryImage, Booking, ContactInfo, Review
+from .models import Service, GalleryImage, ContactInfo, Review
 
 from .models import Service
 from django.utils.html import format_html
@@ -44,13 +44,7 @@ class ServiceAdmin(admin.ModelAdmin):
 class GA(admin.ModelAdmin):
     list_display=("title","image","uploaded_at")
 
-@admin.register(Booking)
-class BA(admin.ModelAdmin):
-    list_display=("name","phone","service","created_at","done")
-    list_filter=("done","created_at")
-    search_fields=("name","phone","address","message")
 
-admin.site.register(ContactInfo)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):

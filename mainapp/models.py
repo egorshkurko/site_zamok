@@ -54,16 +54,6 @@ class GalleryImage(models.Model):
         # ordering = ['order', 'title']
     def __str__(self): return self.title or self.image.name
 
-class Booking(models.Model):
-    name=models.CharField(max_length=200)
-    phone=models.CharField(max_length=50)
-    email=models.EmailField(blank=True)
-    address=models.CharField(max_length=300, blank=True)
-    service=models.ForeignKey(Service, null=True, blank=True, on_delete=models.SET_NULL)
-    message=models.TextField(blank=True)
-    created_at=models.DateTimeField(auto_now_add=True)
-    done=models.BooleanField(default=False)
-    def __str__(self): return f"{self.name} — {self.phone}"
 
 class ContactInfo(models.Model):
     phone=models.CharField(max_length=50, blank=True)
