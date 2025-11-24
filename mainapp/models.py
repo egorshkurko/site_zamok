@@ -87,6 +87,7 @@ class Review(models.Model):
     text = models.TextField(verbose_name='Текст отзыва')
     rating = models.IntegerField(choices=RATING_CHOICES, default=5, verbose_name='Оценка')
     phone = models.CharField(max_length=50, blank=True, verbose_name='Телефон')
+    ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name='IP-адрес')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     is_published = models.BooleanField(default=False, verbose_name='Опубликован')
     

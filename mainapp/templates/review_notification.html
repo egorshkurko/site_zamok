@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #d4af37; color: white; padding: 15px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; }
+        .field { margin-bottom: 15px; }
+        .label { font-weight: bold; color: #555; }
+        .value { margin-top: 5px; }
+        .rating { color: #d4af37; font-size: 18px; }
+        .button { display: inline-block; background-color: #d4af37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 15px; }
+        .footer { text-align: center; color: #999; font-size: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Новый отзыв на сайте Master Zamok</h2>
+        </div>
+        <div class="content">
+            <div class="field">
+                <div class="label">Имя:</div>
+                <div class="value">{{ name }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Телефон:</div>
+                <div class="value">{{ phone|default:"Не указан" }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Оценка:</div>
+                <div class="value rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                    ({{ rating }} звезд)
+                </div>
+            </div>
+            <div class="field">
+                <div class="label">Текст отзыва:</div>
+                <div class="value">{{ text|linebreaks }}</div>
+            </div>
+            <div class="field">
+                <div class="label">Дата:</div>
+                <div class="value">{{ created_at|date:"d.m.Y H:i" }}</div>
+            </div>
+            <a href="{{ admin_url }}" class="button">Перейти в админ-панель</a>
+        </div>
+        <div class="footer">
+            Это автоматическое уведомление от сайта Master Zamok
+        </div>
+    </div>
+</body>
+</html>
+

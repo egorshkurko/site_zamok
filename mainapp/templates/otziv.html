@@ -35,28 +35,28 @@
                     
                     <div class="form-group">
                         <label class="form-label">Ваше имя *</label>
-                        <input type="text" name="name" class="form-input" required placeholder="Иван Иванов">
+                        <input type="text" name="name" class="form-input" required placeholder="Иван Иванов" value="{{ form_data.name|default:'' }}">
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Телефон (необязательно)</label>
-                        <input type="tel" name="phone" class="form-input" placeholder="+7 (999) 123-45-67">
+                        <input type="tel" name="phone" class="form-input" placeholder="+7 (999) 123-45-67" value="{{ form_data.phone|default:'' }}">
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Оценка *</label>
                         <select name="rating" class="form-select" required>
-                            <option value="5" selected>5 - Отлично</option>
-                            <option value="4">4 - Хорошо</option>
-                            <option value="3">3 - Удовлетворительно</option>
-                            <option value="2">2 - Плохо</option>
-                            <option value="1">1 - Очень плохо</option>
+                            <option value="5" {% if form_data.rating == '5' or not form_data.rating %}selected{% endif %}>5 - Отлично</option>
+                            <option value="4" {% if form_data.rating == '4' %}selected{% endif %}>4 - Хорошо</option>
+                            <option value="3" {% if form_data.rating == '3' %}selected{% endif %}>3 - Удовлетворительно</option>
+                            <option value="2" {% if form_data.rating == '2' %}selected{% endif %}>2 - Плохо</option>
+                            <option value="1" {% if form_data.rating == '1' %}selected{% endif %}>1 - Очень плохо</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Ваш отзыв *</label>
-                        <textarea name="text" class="form-input" rows="5" required placeholder="Расскажите о вашем опыте работы с нами..." style="resize: vertical; min-height: 120px; font-family: inherit;"></textarea>
+                        <textarea name="text" class="form-input" rows="5" required placeholder="Расскажите о вашем опыте работы с нами..." style="resize: vertical; min-height: 120px; font-family: inherit;">{{ form_data.text|default:'' }}</textarea>
                     </div>
                     
                     <button type="submit" class="submit-btn">

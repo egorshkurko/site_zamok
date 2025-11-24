@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = ['.masterzamok.pro','31.31.196.78','www.masterzamok.pro','185.221.153.228', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -104,3 +104,7 @@ EMAIL_HOST_USER = 'schkurko.egor@yandex.ru'
 EMAIL_HOST_PASSWORD = 'sjaxfyvovyrngury'
 DEFAULT_FROM_EMAIL = 'schkurko.egor@yandex.ru'  # Должен совпадать с EMAIL_HOST_USER
 SERVER_EMAIL = 'schkurko.egor@yandex.ru'
+EMAIL_TIMEOUT = 10  # Таймаут подключения к SMTP серверу (секунды)
+
+# Адрес для получения уведомлений о новых отзывах
+REVIEW_NOTIFICATION_EMAIL = os.getenv("REVIEW_NOTIFICATION_EMAIL", "allianzufa@gmail.com")

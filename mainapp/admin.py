@@ -54,8 +54,8 @@ admin.site.register(ContactInfo)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['name', 'rating', 'created_at', 'is_published']
+    list_display = ['name', 'rating', 'ip_address', 'created_at', 'is_published']
     list_filter = ['is_published', 'rating', 'created_at']
     list_editable = ['is_published']
-    search_fields = ['name', 'text', 'phone']
-    readonly_fields = ['created_at']
+    search_fields = ['name', 'text', 'phone', 'ip_address']
+    readonly_fields = ['created_at', 'ip_address']
