@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 
-ALLOWED_HOSTS = ['.masterzamok.pro','31.31.196.78','www.masterzamok.pro','185.221.153.228', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.masterzamok.pro','31.31.196.78','www.masterzamok.pro','185.221.153.228', 'localhost', '127.0.0.1', '91.201.40.138']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
